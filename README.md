@@ -89,7 +89,3 @@ home/
 - Create a `CDSFormPage` via Wagtail admin to view the form
 
 ---
-
-## License
-
-MIT or internal use — update as needed.
