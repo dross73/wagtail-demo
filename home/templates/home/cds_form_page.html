@@ -1,0 +1,59 @@
+{% extends "home/cds_base.html" %}
+
+{% block title %}Subscribe to CDS Test Magazine{% endblock %}
+
+{% block content %}
+
+{% if submitted %}
+
+<!-- Thank-you message displayed after successful form submission -->
+<div class="bg-green-100 text-green-800 p-4 rounded mb-6 text-center">
+  Thank you for your order! Your subscription has been received.
+</div>
+
+{% endif %}
+
+<!-- Page header -->
+<h2 class="text-xl font-semibold mb-4">Subscribe Now</h2>
+
+<!-- Offer selection cards -->
+{% include "home/includes/offer_cards.html" %}
+
+<!-- Section heading for form inputs -->
+<h2 class="text-2xl font-bold text-center mb-6 mt-10">Enter Your
+  Information</h2>
+
+<!-- Order form -->
+<form id="order-form" method="POST" class="bg-white p-6 rounded shadow space-y-4">
+  {% csrf_token %}
+  <input type="hidden" name="selected_offer" id="selected_offer" value />
+
+  <!-- Main form fields (name, address, card info) -->
+  {% include "home/includes/form_fields.html" %}
+
+  <div class="pt-4 text-center">
+    <button type="submit"
+      class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Submit</button>
+  </div>
+</form>
+
+<!-- JavaScript for handling offer card selection -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const offerCards = document.querySelectorAll('.offer-card');
+    const offerInput = document.getElementById('selected_offer');
+    const form = document.getElementById('order-form');
+
+    offerCards.forEach((card) => {
+      card.addEventListener('click', () => {
+        offerCards.forEach((c) => c.classList.remove('ring-2', 'ring-blue-600'));
+        card.classList.add('ring-2', 'ring-blue-600');
+        offerInput.value = card.dataset.offer;
+        //Scroll to form
+        form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  });
+</script>
+
+{% endblock %}

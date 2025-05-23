@@ -1,0 +1,41 @@
+{% load static %} {# Load static file support if needed later #}
+
+{% load wagtailcore_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{{ page.title }}</title>
+    {# Use the page's title from Wagtail #}
+  </head>
+  <body>
+    <h1>{{ page.title }}</h1>
+    
+    {# Show the intro RichText field if it's filled out #} 
+    {% if page.intro %}
+      <div>{{ page.intro|richtext }} {# Render the RichText field #}</div>
+    {% endif %}
+
+
+    {# Show success message if form was submitted successfully #}
+    {% if success %} 
+        <p style="color: green;">Thank You! Your order has been submitted.</p>
+    {% endif %}
+
+    {# Start the form. POST sends the data. csrf_token protects it. #}
+
+    <form method="post">
+        {% csrf_token %} {# CSRF token for security #}
+
+        {# Render the form fields dynamically #}
+
+        {{ form.as_p}} {# Render the form fields as paragraphs #}
+        {# This will render all fields in the form #}
+        <button type="submit">Place Order</button>
+    </form>
+    
+
+
+  </body>
+</html>
