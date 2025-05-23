@@ -82,12 +82,6 @@ home/
 
 ---
 
-## Example Screenshot
-
-*You can include a screenshot here of the form in use or the thank-you state.*
-
----
-
 ## Setup Notes (Optional)
 
 - Requires a running Wagtail project (`wagtail start`)
