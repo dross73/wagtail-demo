@@ -11,7 +11,6 @@ import requests  # Used to send HTTP requests (like a form POST)
 class HomePage(Page):
     pass
 
-
 class AboutPage(Page):
     subtitle = models.CharField(max_length=255, blank=True)
     body = RichTextField(blank=True)
