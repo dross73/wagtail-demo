@@ -1,0 +1,6 @@
+[tool.ruff]  # Ruff base config
+line-length = 100  # Max line width
+target-version = "py312"  # Match your Python version
+[tool.ruff.lint]  # Ruff lint rule section
+select = ["E", "F"]  # E = pycodestyle (style), F = pyflakes (logic)
+ignore = ["E501"]  # Ignore long-line warnings (e.g. log messages)

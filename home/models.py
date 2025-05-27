@@ -1,13 +1,11 @@
 from django.db import models
 from wagtail.models import Page
 from wagtail.fields import RichTextField
-from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel
+from wagtail.admin.panels import FieldPanel
 from django.shortcuts import (
     render,
 )  # Used to return a page with a template and dynamic data (like the form)
 import requests  # Used to send HTTP requests (like a form POST)
-from django.http import HttpResponse
-import json
 
 
 class HomePage(Page):
