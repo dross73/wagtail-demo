@@ -11,6 +11,7 @@ import requests  # Used to send HTTP requests (like a form POST)
 class HomePage(Page):
     pass
 
+
 class AboutPage(Page):
     subtitle = models.CharField(max_length=255, blank=True)
     body = RichTextField(blank=True)
@@ -90,7 +91,13 @@ class CDSFormPage(Page):
     # Use Wagtail's default content panels (no custom fields in the CMS for now)
     content_panels = Page.content_panels
 
+    def get_template(self, request, *args, **kwargs):
+        """*args collects any extra positional arguments as a tuple
+        - **kwargs collects any extra named keyword arguments as a dictionary"""
+        return "home/cds_form_page.html"
+
     def serve(self, request):
+        submitted = False # Always define this first
         # Handle form submission (POST)
         if request.method == "POST":
             # Convert form POST data into a standard Python dictionary
@@ -113,12 +120,15 @@ class CDSFormPage(Page):
                 print("Webhook error:", e)
                 submitted = False  # Only show thank-you if no error
 
-            # Re-render the page after submission with the submitted flag
-            return render(
-                request,
-                "home/cds_form_page.html",
-                {"page": self, "submitted": submitted},
-            )
-
-        # For GET requests, just render the empty form
-        return render(request, "home/cds_form_page.html", {"page": self})
+        # Re-render the page after submission with the submitted flag
+        return render(
+            request,
+            "home/cds_form_page.html",
+            {"page": self, "submitted": submitted},
+        )
+    def serve_preview(self, request, mode_name):
+        """
+        This enables Wagtail's Preview feature, which lets you use the built-in
+        accessibility checker on pages with custom serve() logic.
+        """
+        return self.serve(request)
