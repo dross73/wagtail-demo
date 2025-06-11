@@ -1,0 +1,13 @@
+{# home/templates/home/flexible_layout_page.html #}
+{% extends "home/cds_base.html" %}
+
+{% block title %}
+    {{ page.title}}
+{% endblock %}
+
+{% block content %}
+    {# This loop renders each block in the StreamField. Wagtail uses each block's template #}
+    {% for block in page.body %}
+        {{ block }}
+    {% endfor %}
+{% endblock %}

@@ -1,7 +1,8 @@
 from django.db import models
 from wagtail.models import Page
-from wagtail.fields import RichTextField
+from wagtail.fields import RichTextField, StreamField
 from wagtail.admin.panels import FieldPanel
+from .blocks import HeadingBlock, OfferCardsBlock
 from django.shortcuts import (
     render,
 )  # Used to return a page with a template and dynamic data (like the form)
@@ -55,9 +56,7 @@ class MagazineOrderPage(Page):
                 requests.post(
                     "https://webhook.site/62101cd5-f41d-4357-ac18-012c32206c33",
                     json=form.cleaned_data,  # Use cleaned data from the form
-                    headers={
-                        "Content-Type": "application/json"
-                    },  # Set the content type to JSON
+                    headers={"Content-Type": "application/json"},  # Set the content type to JSON
                 )
 
                 # For now, re-render the page with a success message
@@ -97,7 +96,7 @@ class CDSFormPage(Page):
         return "home/cds_form_page.html"
 
     def serve(self, request):
-        submitted = False # Always define this first
+        submitted = False  # Always define this first
         # Handle form submission (POST)
         if request.method == "POST":
             # Convert form POST data into a standard Python dictionary
@@ -113,9 +112,7 @@ class CDSFormPage(Page):
                     json=data,
                     headers={"Content-Type": "application/json"},
                 )
-                submitted = (
-                    True  # Flag used to trigger a thank-you message in the template
-                )
+                submitted = True  # Flag used to trigger a thank-you message in the template
             except Exception as e:
                 print("Webhook error:", e)
                 submitted = False  # Only show thank-you if no error
@@ -126,9 +123,32 @@ class CDSFormPage(Page):
             "home/cds_form_page.html",
             {"page": self, "submitted": submitted},
         )
+
     def serve_preview(self, request, mode_name):
         """
         This enables Wagtail's Preview feature, which lets you use the built-in
         accessibility checker on pages with custom serve() logic.
         """
         return self.serve(request)
+
+
+class FlexibleLayoutPage(Page):
+    # StreamField stores a list of content blocks (like headings, text, images)
+    body = StreamField(
+        [
+            ("heading", HeadingBlock()),
+            ("offer_cards", OfferCardsBlock()),
+        ],
+        use_json_field=True,  # Stores the StreamField data in a JSON field in the DB
+        blank=True,  # Allows the page to be saved without any blocks yet
+    )
+
+    # This defines what appears in teh Wagtail admin for editors
+    content_panels = Page.content_panels + [FieldPanel("body")]
+
+    # Controls which template Wagtail uses to render the front-end page
+    def get_template(self, request, *args, **kwargs):
+        return "home/flexible_layout_page.html"
+
+    class Meta:
+        verbose_name = "Flexible Layout Page"  # Custom name in the admin UI

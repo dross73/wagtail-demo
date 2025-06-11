@@ -1,0 +1,24 @@
+{# home/templates/blocks/offer_cards_block.html #}
+<section class="py-8 px-4 max-w-6xl mx-auto">
+  <h2 class="text-2xl font-bold text-center mb-6">Choose Your Subscription</h2>
+  <div class="grid gap-6 md:grid-cols-3 items-stretch">
+
+    {% for card in self.cards %}
+      <div class="offer-card bg-white rounded-lg shadow p-6 flex flex-col items-center text-center h-full transition-shadow hover:shadow-lg hover:ring hover:ring-blue-200 transform hover:scale-105 cursor-pointer" data-offer="{{ card.offer_value }}">
+        <p class="text-sm uppercase text-gray-500 mb-2">{{ card.issue_label }}</p>
+        <p class="text-3xl font-bold text-blue-700 mb-4">{{ card.price }}</p>
+        <ul class="text-sm text-gray-700 space-y-2 mb-4">
+          {% for feature in card.features %}
+            <li class="flex items-center gap-2">
+              <span class="text-green-600 text-base">✔</span><span>{{ feature }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+        <div class="mt-auto">
+          <button class="bg-blue-700 text-white font-semibold py-2 px-4 rounded hover:bg-blue-800">Select Offer</button>
+        </div>
+      </div>
+    {% endfor %}
+
+  </div>
+</section>
